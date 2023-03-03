@@ -29,6 +29,8 @@ export default class MainSlider extends Slider {
             }
         } catch(e){}
 
+
+        /* Сделать анимацию перелистывания вместо скрытия и показа элемента */
         [...this.slides].forEach(slide => {
             slide.style.display = 'none';
         });

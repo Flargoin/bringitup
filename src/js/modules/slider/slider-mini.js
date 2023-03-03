@@ -25,6 +25,7 @@ export default class MiniSlider extends Slider {
         }
     }
 
+    /* Переделать */
     nextSlide() {
         if(this.slides[1].tagName == 'BUTTON' && this.slides[2].tagName == 'BUTTON') {
             this.container.appendChild(this.slides[0]);
