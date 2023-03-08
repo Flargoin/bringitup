@@ -7,7 +7,6 @@ export default class MiniSlider extends Slider {
 
     decorizeSlides() {
         [...this.slides].forEach(slide => {
-            console.log(slide);
             slide.classList.remove(this.activeClass);
             if(this.animate) {
                 slide.querySelector('.card__title').style.opacity = '0.4';
