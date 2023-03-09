@@ -55,6 +55,7 @@ export default class MainSlider extends Slider {
             });
         });
 
+        /* Переписать с императивного стиля */
         document.querySelectorAll('.prevmodule').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
