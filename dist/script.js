@@ -477,9 +477,15 @@ class ShowInfo {
   init() {
     this.btns.forEach(btn => {
       btn.addEventListener('click', () => {
-        /* Изменить на анимацию */
+        /* Изменить кнопку на минус и обратно на плюс */
         const sibling = btn.closest('.module__info-show').nextElementSibling;
+        console.log(sibling);
+        sibling.classList.add('animated');
         sibling.classList.toggle('msg');
+        sibling.classList.toggle('fadeIn');
+
+        /* btn.children.removeChild('path'); */
+
         sibling.style.marginTop = '20px';
       });
     });
@@ -523,22 +529,37 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.hanson.classList.remove('slideInUp');
       }
     } catch (e) {}
-
-    /* Сделать анимацию перелистывания вместо скрытия и показа элемента */
-    [...this.slides].forEach(slide => {
-      slide.style.display = 'none';
-    });
-    this.slides[this.slideIndex - 1].style.display = 'block';
   }
   plusSlides(n) {
     this.showSlides(this.slideIndex += n);
   }
+  nextSlide(selector) {
+    const slideHeight = this.slides[0].clientHeight;
+    if (this.offset !== slideHeight * (this.slides.length - 1)) {
+      this.offset += slideHeight;
+    } else {
+      this.offset = 0;
+    }
+    this.container.style.transition = 'transform 1s';
+    this.container.style.transform = `translateY(-${this.offset}px)`;
+  }
+  prevSlide(selector) {
+    const slideHeight = this.slides[0].clientHeight;
+    if (this.offset === 0) {
+      this.offset = slideHeight * (this.slides.length - 1);
+    } else {
+      this.offset -= slideHeight;
+    }
+    this.container.style.transition = 'transform 1s';
+    this.container.style.transform = `translateY(-${this.offset}px)`;
+  }
   bindTriggers() {
-    this.btns.forEach(btn => {
-      btn.addEventListener('click', () => {
+    this.btns.forEach(item => {
+      item.addEventListener('click', () => {
         this.plusSlides(1);
+        this.nextSlide(item);
       });
-      btn.parentNode.previousElementSibling.addEventListener('click', e => {
+      item.parentNode.previousElementSibling.addEventListener('click', e => {
         e.preventDefault();
         this.slideIndex = 1;
         this.showSlides(this.slideIndex);
@@ -551,6 +572,7 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
         e.stopPropagation();
         e.preventDefault();
         this.plusSlides(-1);
+        this.prevSlide(item);
       });
     });
     document.querySelectorAll('.nextmodule').forEach(item => {
@@ -558,6 +580,7 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
         e.stopPropagation();
         e.preventDefault();
         this.plusSlides(1);
+        this.nextSlide(item);
       });
     });
   }
@@ -687,6 +710,9 @@ class Slider {
     this.animate = animate;
     this.autoplay = autoplay;
     this.slideIndex = 1;
+    this.sliderHeight = document.body.clientHeight;
+    /* this.slideHeight= window.getComputedStyle(document.querySelector('.showup')).height; */
+    this.offset = 0;
   }
 }
 

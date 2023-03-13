@@ -28,27 +28,44 @@ export default class MainSlider extends Slider {
                 this.hanson.classList.remove('slideInUp');
             }
         } catch(e){}
-
-
-        /* Сделать анимацию перелистывания вместо скрытия и показа элемента */
-        [...this.slides].forEach(slide => {
-            slide.style.display = 'none';
-        });
-
-        this.slides[this.slideIndex - 1].style.display = 'block';
     }
 
     plusSlides(n) {
         this.showSlides(this.slideIndex += n);
     }
 
-    bindTriggers() {
-        this.btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.plusSlides(1);
-            })
+    nextSlide(selector) { 
+        const slideHeight= this.slides[0].clientHeight;
+        if (this.offset !== (slideHeight * (this.slides.length - 1))) {
+            this.offset += slideHeight;
+        } else {
+            this.offset = 0;
+        }  
 
-            btn.parentNode.previousElementSibling.addEventListener('click', (e) => {
+        this.container.style.transition = 'transform 1s';  
+        this.container.style.transform = `translateY(-${this.offset}px)`;
+    }
+    
+    prevSlide(selector) {
+        const slideHeight= this.slides[0].clientHeight;
+        if (this.offset === 0) {
+            this.offset = slideHeight * (this.slides.length - 1);
+        } else {
+            this.offset -= slideHeight;
+        }
+
+        this.container.style.transition = 'transform 1s';  
+        this.container.style.transform = `translateY(-${this.offset}px)`;
+    }
+
+    bindTriggers() {
+        this.btns.forEach(item => {
+            item.addEventListener('click', () => {
+                this.plusSlides(1);
+                this.nextSlide(item);
+            });
+
+            item.parentNode.previousElementSibling.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.slideIndex = 1;
                 this.showSlides(this.slideIndex);
@@ -61,6 +78,7 @@ export default class MainSlider extends Slider {
                 e.stopPropagation();
                 e.preventDefault();
                 this.plusSlides(-1);
+                this.prevSlide(item);
             });
         });
 
@@ -69,6 +87,7 @@ export default class MainSlider extends Slider {
                 e.stopPropagation();
                 e.preventDefault();
                 this.plusSlides(1);
+                this.nextSlide(item);
             });
         });
     }

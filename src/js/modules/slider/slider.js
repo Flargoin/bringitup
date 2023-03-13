@@ -16,6 +16,10 @@ export default class Slider {
         this.animate = animate;
         this.autoplay = autoplay;
         this.slideIndex = 1;
+
+        this.sliderHeight = document.body.clientHeight;
+        /* this.slideHeight= window.getComputedStyle(document.querySelector('.showup')).height; */
+        this.offset = 0;
     }
 
 }
